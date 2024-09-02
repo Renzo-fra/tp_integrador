@@ -1,3 +1,91 @@
-    body {
-        background-image: ;
-       }
+body{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-image: url(tipo_cambio.jpg);
+    background-repeat: no-repeat;
+    background-position: center; 
+  background-attachment: fixed;
+}
+
+main{
+    /*background: linear-gradient(to top, #FFD700, #000000);*/
+    height: 96vh;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 10px ;
+}
+
+h1 a{
+    color: #fff;
+}
+
+.container{
+    display: flex;
+    justify-content: space-around;
+}
+
+h2, ul, li, table, td, th, div {
+    color: #fff;
+}
+
+h2{
+    padding: 16px;
+}
+
+.table{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.table table{
+    border: 1px solid #000000;
+    border-collapse: collapse; /*hace que se peguen las lineas*/
+}
+
+.tipo_cambio, h2{
+    text-align: center;
+}
+
+ul{
+    padding: 5px 20px;
+}
+
+table{
+    padding: 15px 20px;
+}
+
+.table table th, table td{
+    border: 1px solid #000000;
+}
+
+td{
+    text-align: center;
+    padding: 15px 20px;
+}
+
+th{
+    text-align: center;
+    padding: 15px 20px;
+}
+
+.pagina{
+    font-size: 64px;
+    text-align: center;
+    color: #000000;
+}
+
+footer{
+    background: green;
+    padding: 10px;
+    bottom: 0vh;
+    position:absolute;
+    width: 100%;
+    text-align: center;
+}
+
