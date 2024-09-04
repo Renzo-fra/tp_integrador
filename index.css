@@ -3,15 +3,41 @@ body{
     height: 100%;
     padding: 0;
     margin: 0;
-    background-image: url(tipo_cambio.jpg);
+    /*background-image: url(tipo_cambio.jpg);*/
     background-repeat: no-repeat;
     background-position: center; 
   background-attachment: fixed;
 }
 
 main{
-    /*background: linear-gradient(to top, #FFD700, #000000);*/
+    background: linear-gradient(to top, #FFD700, #000000);
     height: 96vh;
+}
+
+.container{
+    display: grid;
+    /*grid-template: filas / columnas*/
+    grid-template: 100px  1fr 100px / 2000px 1fr;
+    grid-template-areas: "header header" "contenido" "footer footer";
+}
+
+.item{
+    background-color: #000000;
+    padding: 10px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.header{
+    grid-area: header;
+}
+
+.contenido{
+    grid-area: contenido;
+}
+
+.footer{
+    grid-area: footer;
 }
 
 h1 {
@@ -24,7 +50,7 @@ h1 a{
     color: #fff;
 }
 
-.container{
+.menu{
     display: flex;
     justify-content: space-around;
 }
