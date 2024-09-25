@@ -2,10 +2,11 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 body{
-    background: linear-gradient(to top, #FFD700, #000000);
+    background-color: #9a5;
     width: 100%;
     height: auto;
 }
@@ -15,16 +16,17 @@ main{
 }
 
 header{
+    background-color: #ba7;
     display: flex;
     justify-content: space-between;
-    margin: 24px 16px;
     align-items: center;
+    width: 100%;
 }
 
 nav a{
     padding: 16px;
     margin: 16px;
-    color: #fff;
+    color: #000;
     font-size: 24px;
 }
 
@@ -33,7 +35,7 @@ nav a{
 }
 
 h1{
-    color: #fff;
+    color: #000;
     font-size: 36px;
 }
 
@@ -41,11 +43,6 @@ h1{
     display: flex;
     justify-content: space-around;
 }
-
-h2, ul, li, table, td, th, div {
-    color: #fff;
-}
-
 
 
 .table{
@@ -93,7 +90,7 @@ th{
 }
 
 footer{
-    background: green;
+    background: #ba7;
     padding: 10px;
     bottom: 0vh;
     position:absolute;
