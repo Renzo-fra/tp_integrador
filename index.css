@@ -21,6 +21,7 @@ header{
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    border-bottom: solid;
 }
 
 nav a{
@@ -31,12 +32,32 @@ nav a{
 }
 
 .container{
-    margin-top: 38px;
+    /*margin-top: 38px;*/
+    margin: 15px;
+}
+
+.tipo{
+    /*border: solid;*/
+    margin: 10px;
+    border-radius: 10px;
+    list-style-type: none;
+    padding: 10px;
+    background-color: #ba7;
+}
+
+.tipo:hover{
+    box-shadow: 0 5px 0 #000;
+    border: solid;
+}
+
+.list_cambio{
+    list-style-type: none;
 }
 
 h1{
     color: #000;
     font-size: 36px;
+    margin-left: 10px;
 }
 
 .menu{
@@ -96,5 +117,6 @@ footer{
     position:absolute;
     width: 100%;
     text-align: center;
+    border-top: solid;
 }
 
