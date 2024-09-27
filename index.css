@@ -1,21 +1,21 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
 }
 
-body{
+body {
     background-color: #9a5;
     width: 100%;
     height: auto;
 }
 
-main{
+main {
     height: 96vh;
 }
 
-header{
+header {
     background-color: #ba7;
     display: flex;
     justify-content: space-between;
@@ -24,19 +24,19 @@ header{
     border-bottom: solid;
 }
 
-nav a{
+nav a {
     padding: 16px;
     margin: 16px;
     color: #000;
     font-size: 24px;
 }
 
-.container{
+.container {
     /*margin-top: 38px;*/
     margin: 15px;
 }
 
-.tipo{
+.tipo {
     /*border: solid;*/
     margin: 10px;
     border-radius: 10px;
@@ -45,78 +45,82 @@ nav a{
     background-color: #ba7;
 }
 
-.tipo:hover{
+.tipo:first-child {
+    display: none;
+}
+
+.tipo:hover {
     box-shadow: 0 5px 0 #000;
     border: solid;
 }
 
-.list_cambio{
+.list_cambio {
     list-style-type: none;
 }
 
-h1{
+h1 {
     color: #000;
     font-size: 36px;
     margin-left: 10px;
 }
 
-.menu{
+.menu {
     display: flex;
     justify-content: space-around;
 }
 
-
-.table{
+.table {
     display: flex;
     justify-content: center;
     margin-top: 30px;
 }
 
-.table table{
+.table table {
     border: 1px solid #000000;
-    border-collapse: collapse; /*hace que se peguen las lineas*/
+    border-collapse: collapse;
+    /*hace que se peguen las lineas*/
 }
 
-.tipo_cambio, h2{
+.tipo_cambio,
+h2 {
     text-align: center;
 }
 
-ul{
+ul {
     padding: 5px 20px;
 }
 
-
-table{
+table {
     padding: 15px 20px;
 }
 
-.table table th, table td{
+.table table th,
+table td {
     border: 1px solid #000000;
 }
 
-td{
+td {
     text-align: center;
     padding: 15px 20px;
 }
 
-th{
+th {
     text-align: center;
     padding: 15px 20px;
 }
 
-.pagina{
+.pagina {
     font-size: 64px;
     text-align: center;
     color: #000000;
 }
 
-footer{
+footer {
     background: #ba7;
     padding: 10px;
     bottom: 0vh;
-    position:absolute;
+    position: absolute;
     width: 100%;
     text-align: center;
     border-top: solid;
 }
-
