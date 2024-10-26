@@ -12,7 +12,7 @@ body {
 }
 
 main {
-    height: 96vh;
+    min-height: 96vh;
 }
 
 header {
@@ -32,17 +32,27 @@ nav a {
 }
 
 .container {
-    /*margin-top: 38px;*/
-    margin: 15px;
+    width: 80%;
+    margin: auto;
+}
+
+.lista{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: center;
+    margin: auto;
+    gap: 18px;
 }
 
 .tipo {
-    /*border: solid;*/
-    margin: 10px;
+    /*margin: 15px;*/
     border-radius: 10px;
     list-style-type: none;
     padding: 10px;
     background-color: #ba7;
+    text-align: center;
+    width: 100%;
+
 }
 
 .tipo:first-child {
@@ -118,8 +128,8 @@ th {
 footer {
     background: #ba7;
     padding: 10px;
-    bottom: 0vh;
-    position: absolute;
+    top: 10px;
+    position: relative;
     width: 100%;
     text-align: center;
     border-top: solid;
