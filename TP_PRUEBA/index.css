@@ -36,7 +36,7 @@ nav a {
     margin: auto;
 }
 
-.lista{
+.lista {
     display: grid;
     grid-template-columns: auto auto auto auto;
     justify-content: center;
@@ -45,18 +45,12 @@ nav a {
 }
 
 .tipo {
-    /*margin: 15px;*/
     border-radius: 10px;
     list-style-type: none;
     padding: 10px;
     background-color: #ba7;
     text-align: center;
     width: 100%;
-
-}
-
-.tipo:first-child {
-    display: none;
 }
 
 .tipo:hover {
@@ -74,61 +68,9 @@ h1 {
     margin-left: 10px;
 }
 
-.menu {
-    display: flex;
-    justify-content: space-around;
-}
-
-.table {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.table table {
-    border: 1px solid #000000;
-    border-collapse: collapse;
-    /*hace que se peguen las lineas*/
-}
-
-.tipo_cambio,
-h2 {
-    text-align: center;
-}
-
-ul {
-    padding: 5px 20px;
-}
-
-table {
-    padding: 15px 20px;
-}
-
-.table table th,
-table td {
-    border: 1px solid #000000;
-}
-
-td {
-    text-align: center;
-    padding: 15px 20px;
-}
-
-th {
-    text-align: center;
-    padding: 15px 20px;
-}
-
-.pagina {
-    font-size: 64px;
-    text-align: center;
-    color: #000000;
-}
-
 footer {
     background: #ba7;
     padding: 10px;
-    top: 10px;
     position: relative;
     width: 100%;
     text-align: center;
