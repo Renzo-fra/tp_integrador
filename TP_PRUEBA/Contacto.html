@@ -1,35 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="index.css">
     <title>Contacto</title>
 </head>
 <body>
-    <header>
-        <h1>UTN FINANCIAMIENTO</h1>
-        <nav>
-            <a href="index.html"><i class="fas fa-home"> HOME </i></a>
-            <a href="historico.html"><i class="fa-solid fa-landmark"> HISTORICO </i></a>
-            <a href="Contacto.html"><i class="fa-solid fa-address-book"> CONTACTO </i></a>
-        </nav>
-    </header>
     <main>
-        <div>
+        <div class="formatoprincipal">
             <form id="formularioContacto">
                 <label class="label" for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required><br>
+                <input type="text" id="nombre" name="nombre" required>
     
                 <label class="label" for="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" required><br>
+                <input type="text" id="apellido" name="apellido" required>
     
                 <label class="label" for="email">Email:</label>
-                <input type="email" id="email" name="email" required><br>
+                <input type="email" id="email" name="email" required>
     
                 <label class="label" for="mensaje">Mensaje:</label>
-                <textarea id="mensaje" name="mensaje" required></textarea><br>
+                <textarea id="mensaje" name="mensaje" required></textarea>
     
                 <button class="label" type="submit">Enviar</button>
             </form>
@@ -37,11 +27,14 @@
     </main>
     
     <footer class="footer">
-        <div>
+        <div class="container_footer">
+        <div class="footer-nombres">
             <a href="#">Anfuso Tobias</a>
             <a href="#">Fragapane Renzo</a>
         </div>
-        <div >Datos tomados desde dolarapi.com</div>
+        <div class="footer-datos">Tecnicatura en programación - UTN</div>
+        <div class="footer-datos">Datos tomados desde dolarapi.com</div>
+        </div>
     </footer>
 </body>
 </html>
