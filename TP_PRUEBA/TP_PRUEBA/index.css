@@ -76,15 +76,3 @@ footer {
     text-align: center;
     border-top: solid;
 }
-
-#formularioContacto {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.label {
-    margin-top: 10px;
-}
