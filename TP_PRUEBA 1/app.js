@@ -32,3 +32,4 @@ document.getElementById("formularioContacto").addEventListener('submit', functio
         alert('Hubo un error al enviar el contacto.');
     });
 });
+

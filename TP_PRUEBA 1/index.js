@@ -1,5 +1,5 @@
 // URL del servidor local Flask
-/*const apiUrl = "http://127.0.0.1:5000/api/cotizaciones";
+const apiUrl = "http://127.0.0.1:5000/api/cotizaciones";
 
 async function obtenerDatos() {
     try {
@@ -45,8 +45,6 @@ async function obtenerDatos() {
 }
 
 document.addEventListener('DOMContentLoaded', obtenerDatos);
-
-*/
 
 
 document.getElementById("formularioContacto").addEventListener('submit', function(event) {

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify #flask sirve para crear la aplicacion web y jsonify convierte los datos de python en un formato JSON para enviarlos como respuestas
+from flask import Flask, jsonify, request #flask sirve para crear la aplicacion web y jsonify convierte los datos de python en un formato JSON para enviarlos como respuestas
 from flask_cors import CORS  #cors permite que el servidor acepte solicitudes desde otros dominios, uril cuando accede a esta API desde un fronted en un dominio diferente
 import requests #resquests se utiliza para hacer solictudes HTTP a la API externa desde donde se obtiene las cotizaciones 
 import json
@@ -35,14 +35,9 @@ def obtener_cotizaciones():
 def api_cotizaciones():
     return jsonify(obtener_cotizaciones()) #llama a obtener_cotizaciones para obtener los datos y utiliza jsonify para enviarlos en formato JSON al cliente que hizo la solicitud
 
-#inicia el servidor
-if __name__ == "__main__":
-    app.run(debug=True) 
-
-
 @app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
 def contacto():
-    if requests.method == 'OPTIONS':
+    if request.method == 'OPTIONS':
         # Responde a la solicitud preflight con un estado 200 y headers de CORS
         response = app.response_class(status=200)
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -52,13 +47,13 @@ def contacto():
         return response
 
     # Procesa la solicitud POST aquí
-    data = requests.get_json()
+    data = request.get_json()
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
     # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
     # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
-    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'],data['email'])
+    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
     return jsonify({"status": "Contacto recibido", "data": data}), 200
 
 def mail_enviar(nombre,apellido,email,informacion_enviar):
@@ -96,6 +91,39 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
         print(f'Oops... {error}')
         if error.response is not None:
             print(error.response.text)
+            
+            
+@app.route('/api/historico/<tipo_dolar>/<fecha_inicio>/<fecha_fin>/<int:valores>', methods=["GET"])
+def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
+    # URL de la API externa que recupera los datos
+    api_url = f"https://api.argentinadatos.com/v1/cotizaciones/dolares/{tipo_dolar}"
+    
+    # Parámetros para limitar por fecha y cantidad de valores
+    params = {
+        "fechaInicio": fecha_inicio,
+        "fechaFin": fecha_fin,
+        "cantidad": valores
+    }
+    
+    try:
+        response = requests.get(api_url, params=params)
+        response.raise_for_status()  # Lanzará un error si la respuesta no es correcta
+        
+        datos = response.json()
+        # Filtramos para asegurarnos de que se obtienen los datos en el formato correcto
+        datos_historicos = [
+            {"fecha": item["fecha"], "valor": item["valor"]}
+            for item in datos.get("data", [])
+        ]
+
+        print("Datos históricos recuperados:", datos_historicos)  # Agregar este registro
+        return jsonify(datos_historicos)
+
+    except requests.exceptions.RequestException as e:
+        print("Error al obtener datos de la API externa:", e)  # Registro de error en consola
+        return jsonify({"error": "No se pudieron obtener los datos"}), 500
+
+
 
 
 #inicia el servidor
