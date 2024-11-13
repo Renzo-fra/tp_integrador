@@ -14,7 +14,7 @@ def obtener_cotizaciones():
     response = requests.get(api_url) 
     datos_api = response.json() 
 
-# cotizaciones = []
+   # cotizaciones = []
 
     for cotizacion in datos_api:
         nombre = cotizacion.get("nombre", "Desconocido")
@@ -130,61 +130,6 @@ def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
 
 
 
-@app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
-def contacto():
-    if request.method == 'OPTIONS':
-        response = app.response_class(status=200)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        return response
-
-    data = request.get_json()
-    if not data or 'email1' not in data:
-        return jsonify({"error": "No se proporcionaron datos o falta el campo 'email1'"}), 400
-
-    email1 = data['email1']
-    enviar_mail_enviar(email1)
-
-    return jsonify({"status": "Contacto recibido y correo enviado", "email": email1}), 200
-
-def enviar_mail_enviar(email):
-    data = {
-        'service_id': 'service_tq6wwwh',
-        'template_id': 'template_mx23lgn',
-        'user_id': 'kPneVDwcNx4UK_xyp',
-        'accessToken': 'vs9nufahysZPpyZwuUS9L',
-        'template_params': {
-            'user_email': email,
-            'from_name': 'Pagina Cotizaciones',
-            'message': 'Cotización solicitada'
-        }
-    }
-
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Origin': 'https://your-website.com',
-        'Referer': 'https://your-website.com/'
-    }
-
-    try:
-        response = requests.post(
-            'https://api.emailjs.com/api/v1.0/email/send',
-            data=json.dumps(data),
-            headers=headers
-        )
-        response.raise_for_status()
-        print('Correo enviado exitosamente')
-    except requests.exceptions.RequestException as error:
-        print(f'Error al enviar el correo: {error}')
-        if error.response is not None:
-            print(error.response.text)
-
-
 '''
 
 def obtener_enviar_cotizaciones():
@@ -233,7 +178,9 @@ def contacto():
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
-   
+    # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
+    # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
+    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
     return jsonify({"status": "Contacto recibido", "data": data}), 200
 
 def enviar_mail_enviar(email):
