@@ -30,16 +30,8 @@ def obtener_cotizaciones():
             "venta": venta,
             "fecha": fecha
         })
-        email="cotizacion de dolares\n"
-        for i in cotizaciones:
-            email += f"{i['nombre']}\n"
-            email += f"{i['tipo']}\n"
-            email += f"{i['compra']}\n"
-            email += f"{i['venta']}\n"
-            email += f"{i['fecha']}\n"
-
-
-    return cotizaciones , email 
+    
+    return cotizaciones 
 
 
 # Endpoint para servir los datos de cotizaciones
@@ -103,13 +95,97 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
         print(f'Oops... {error}')
         if error.response is not None:
             print(error.response.text)
+    
+# Endpoint para datos históricos
+@app.route('/api/historico/<tipo_dolar>/<fecha_inicio>/<fecha_fin>/<int:valores>', methods=["GET"])
+def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
+    api_url = f"https://api.argentinadatos.com/v1/cotizaciones/dolares/{tipo_dolar}"
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        datos = response.json()
+        #print(datos)
+        fechas=[]
+        fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d")
+        diferencia_fechas=(fecha_fin-fecha_inicio)/(valores-1)
+        for cont in range(valores):
+            fecha_str = (fecha_inicio+diferencia_fechas*cont).strftime("%Y-%m-%d")
+            fechas.append(fecha_str)
 
-''' enviar_cotizacion(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
-    '''
+        datos_historicos = []
+        for fecha in fechas:
+            for dato in datos:
+                if(dato['fecha']==fecha):
+                    datos_historicos.append({
+                        'fecha':dato['fecha'],
+                        'valor':dato['compra']
+                    })
+        print(datos_historicos)
+        return jsonify(datos_historicos)
 
-def enviar_cotizacion(email):
-    email1=request.form.get('email1')
-    data = { 
+    except requests.exceptions.RequestException as e:
+        print("Error al obtener datos de la API externa:", e)
+        return jsonify({"error": "No se pudieron obtener los datos"}), 500
+
+
+
+
+
+def obtener_enviar_cotizaciones():
+    api_url = "https://dolarapi.com/v1/dolares"
+    response = requests.get(api_url) 
+    datos_api = response.json() 
+
+    for cotizacion in datos_api:
+        nombre = cotizacion.get("nombre", "Desconocido")
+        tipo = cotizacion.get("casa", "Desconocido")
+        compra = cotizacion.get("compra")
+        venta = cotizacion.get("venta")
+        fecha = cotizacion.get("fechaActualizacion")
+
+        cotizaciones.append({ 
+            "nombre": nombre,
+            "tipo": tipo,
+            "compra": compra,
+            "venta": venta,
+            "fecha": fecha
+        })
+    email="cotizacion de dolares\n"
+    for i in cotizaciones:
+            email += f"{i['nombre']}\n"
+            email += f"{i['tipo']}\n"
+            email += f"{i['compra']}\n"
+            email += f"{i['venta']}\n"
+            email += f"{i['fecha']}\n"
+    return email 
+
+
+
+@app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
+def contacto():
+    if request.method == 'OPTIONS':
+        # Responde a la solicitud preflight con un estado 200 y headers de CORS
+        response = app.response_class(status=200)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        return response
+
+    # Procesa la solicitud POST aquí
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No se proporcionaron datos"}), 400
+
+    # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
+    # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
+    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
+    return jsonify({"status": "Contacto recibido", "data": data}), 200
+
+def enviar_mail_enviar(email):
+    email1 = request.form.get('email1')
+    data = {
         'service_id': 'service_tq6wwwh',
         'template_id': 'template_mx23lgn',
         'user_id': 'kPneVDwcNx4UK_xyp',
@@ -144,37 +220,6 @@ def enviar_cotizacion(email):
             print(error.response.text)
 
 
-# Endpoint para datos históricos
-@app.route('/api/historico/<tipo_dolar>/<fecha_inicio>/<fecha_fin>/<int:valores>', methods=["GET"])
-def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
-    api_url = f"https://api.argentinadatos.com/v1/cotizaciones/dolares/{tipo_dolar}"
-    try:
-        response = requests.get(api_url)
-        response.raise_for_status()
-        datos = response.json()
-        #print(datos)
-        fechas=[]
-        fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
-        fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d")
-        diferencia_fechas=(fecha_fin-fecha_inicio)/(valores-1)
-        for cont in range(valores):
-            fecha_str = (fecha_inicio+diferencia_fechas*cont).strftime("%Y-%m-%d")
-            fechas.append(fecha_str)
-
-        datos_historicos = []
-        for fecha in fechas:
-            for dato in datos:
-                if(dato['fecha']==fecha):
-                    datos_historicos.append({
-                        'fecha':dato['fecha'],
-                        'valor':dato['compra']
-                    })
-        print(datos_historicos)
-        return jsonify(datos_historicos)
-
-    except requests.exceptions.RequestException as e:
-        print("Error al obtener datos de la API externa:", e)
-        return jsonify({"error": "No se pudieron obtener los datos"}), 500
 
 
 #inicia el servidor
