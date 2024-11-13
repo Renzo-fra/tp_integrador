@@ -1,4 +1,3 @@
-/*const apiHistoricoUrl = "http://127.0.0.1:5000/api/historico";*/
 document.getElementById("datosHistorico").addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -11,7 +10,7 @@ document.getElementById("datosHistorico").addEventListener('submit', function(ev
     // Construir la URL de la solicitud
     const peticion = `http://127.0.0.1:5000/api/historico/${dolar}/${fechainicio}/${fechafin}/${valores}`;
 
-    fetch(peticion, { mode: 'cors' })
+    fetch(peticion)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error en la respuesta: ${response.status}`);
@@ -58,7 +57,6 @@ function crearGrafico(data) {
         }
     });
 }
-
 /*
 async function obtenerHistorico(moneda) {
     try {

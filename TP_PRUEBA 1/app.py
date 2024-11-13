@@ -91,11 +91,12 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
         print(f'Oops... {error}')
         if error.response is not None:
             print(error.response.text)
-            
-            
+
+
+
+# Endpoint para datos históricos
 @app.route('/api/historico/<tipo_dolar>/<fecha_inicio>/<fecha_fin>/<int:valores>', methods=["GET"])
 def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
-    # URL de la API externa que recupera los datos
     api_url = f"https://api.argentinadatos.com/v1/cotizaciones/dolares/{tipo_dolar}"
     
     # Parámetros para limitar por fecha y cantidad de valores
@@ -103,27 +104,20 @@ def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
         "fechaInicio": fecha_inicio,
         "fechaFin": fecha_fin,
         "cantidad": valores
-    }
+    } 
     
     try:
-        response = requests.get(api_url, params=params)
-        response.raise_for_status()  # Lanzará un error si la respuesta no es correcta
-        
+        response = requests.get(api_url,)
+        response.raise_for_status()
         datos = response.json()
-        # Filtramos para asegurarnos de que se obtienen los datos en el formato correcto
-        datos_historicos = [
-            {"fecha": item["fecha"], "valor": item["valor"]}
-            for item in datos.get("data", [])
-        ]
+        print(datos)
 
-        print("Datos históricos recuperados:", datos_historicos)  # Agregar este registro
-        return jsonify(datos_historicos)
+        
+    # return jsonify(datos_historicos)
 
     except requests.exceptions.RequestException as e:
-        print("Error al obtener datos de la API externa:", e)  # Registro de error en consola
+        print("Error al obtener datos de la API externa:", e)
         return jsonify({"error": "No se pudieron obtener los datos"}), 500
-
-
 
 
 #inicia el servidor
