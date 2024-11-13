@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request #flask sirve para crear la aplicacion 
 from flask_cors import CORS  #cors permite que el servidor acepte solicitudes desde otros dominios, uril cuando accede a esta API desde un fronted en un dominio diferente
 import requests #resquests se utiliza para hacer solictudes HTTP a la API externa desde donde se obtiene las cotizaciones 
 import json
+from datetime import datetime,timedelta
 
 app = Flask(__name__) #inicia la aplicacion de flask
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}}) #habilita CORS para la aplicacion permitiendo que cualquier origen * pueda hacer solicitudes a la API en las rutas que empiecen con /api/*
@@ -98,22 +99,29 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
 @app.route('/api/historico/<tipo_dolar>/<fecha_inicio>/<fecha_fin>/<int:valores>', methods=["GET"])
 def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
     api_url = f"https://api.argentinadatos.com/v1/cotizaciones/dolares/{tipo_dolar}"
-    
-    # Parámetros para limitar por fecha y cantidad de valores
-    params = {
-        "fechaInicio": fecha_inicio,
-        "fechaFin": fecha_fin,
-        "cantidad": valores
-    } 
-    
     try:
-        response = requests.get(api_url,)
+        response = requests.get(api_url)
         response.raise_for_status()
         datos = response.json()
-        print(datos)
+        #print(datos)
+        fechas=[]
+        fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d")
+        diferencia_fechas=(fecha_fin-fecha_inicio)/(valores-1)
+        for cont in range(valores):
+            fecha_str = (fecha_inicio+diferencia_fechas*cont).strftime("%Y-%m-%d")
+            fechas.append(fecha_str)
 
-        
-    # return jsonify(datos_historicos)
+        datos_historicos = []
+        for fecha in fechas:
+            for dato in datos:
+                if(dato['fecha']==fecha):
+                    datos_historicos.append({
+                        'fecha':dato['fecha'],
+                        'valor':dato['compra']
+                    })
+        print(datos_historicos)
+        return jsonify(datos_historicos)
 
     except requests.exceptions.RequestException as e:
         print("Error al obtener datos de la API externa:", e)
