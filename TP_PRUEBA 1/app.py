@@ -177,10 +177,7 @@ def contacto():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
-
-    # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
-    # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
-    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
+ 
     return jsonify({"status": "Contacto recibido", "data": data}), 200
 
 def enviar_mail_enviar(email):
