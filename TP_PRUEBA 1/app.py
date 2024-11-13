@@ -1,6 +1,6 @@
-from flask import Flask, jsonify, request #flask sirve para crear la aplicacion web y jsonify convierte los datos de python en un formato JSON para enviarlos como respuestas
-from flask_cors import CORS  #cors permite que el servidor acepte solicitudes desde otros dominios, uril cuando accede a esta API desde un fronted en un dominio diferente
-import requests #resquests se utiliza para hacer solictudes HTTP a la API externa desde donde se obtiene las cotizaciones 
+from flask import Flask, jsonify, request 
+from flask_cors import CORS  
+import requests
 import json
 from datetime import datetime,timedelta
 
