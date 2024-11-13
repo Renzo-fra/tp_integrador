@@ -1,18 +1,20 @@
 from flask import Flask, jsonify, request 
-from flask_cors import CORS  
 import requests
 import json
 from datetime import datetime,timedelta
+from flask_cors import CORS 
 
 app = Flask(__name__) #inicia la aplicacion de flask
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}}) #habilita CORS para la aplicacion permitiendo que cualquier origen * pueda hacer solicitudes a la API en las rutas que empiecen con /api/*
 
+cotizaciones = []
 # Función para obtener datos de la API de Dolar y procesarlos
 def obtener_cotizaciones():
     api_url = "https://dolarapi.com/v1/dolares"
-    response = requests.get(api_url) #hace una solicitud GET a la URL de la API y almacena la respuesta 
-    datos_api = response.json() #convierte la repuesta en JSON, luego procesa cada elemento de datos_api, obteniendo las claves nombre, casa (tipo), compra, venta, y fechaActualizacion y añadiéndolas a una lista cotizaciones.
-    cotizaciones = []
+    response = requests.get(api_url) 
+    datos_api = response.json() 
+
+   # cotizaciones = []
 
     for cotizacion in datos_api:
         nombre = cotizacion.get("nombre", "Desconocido")
@@ -21,15 +23,24 @@ def obtener_cotizaciones():
         venta = cotizacion.get("venta")
         fecha = cotizacion.get("fechaActualizacion")
 
-        cotizaciones.append({ #este enfoque es muy común cuando se trabaja con datos provenientes de APIs, ya que facilita la recolección y procesamiento de grandes cantidades de información
+        cotizaciones.append({ 
             "nombre": nombre,
             "tipo": tipo,
             "compra": compra,
             "venta": venta,
             "fecha": fecha
         })
+        email="cotizacion de dolares\n"
+        for i in cotizaciones:
+            email += f"{i['nombre']}\n"
+            email += f"{i['tipo']}\n"
+            email += f"{i['compra']}\n"
+            email += f"{i['venta']}\n"
+            email += f"{i['fecha']}\n"
 
-    return cotizaciones #la función devuelve cotizaciones, una lista de diccionarios con los datos de cada tipo de cambio del dólar.
+
+    return cotizaciones , email 
+
 
 # Endpoint para servir los datos de cotizaciones
 @app.route("/api/cotizaciones", methods=["GET"]) #define un endpoint /api/cotizaciones que acepta solo solicitudes GET
@@ -93,6 +104,44 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
         if error.response is not None:
             print(error.response.text)
 
+''' enviar_cotizacion(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
+    '''
+
+def enviar_cotizacion(email):
+    email1=request.form.get('email1')
+    data = { 
+        'service_id': 'service_tq6wwwh',
+        'template_id': 'template_mx23lgn',
+        'user_id': 'kPneVDwcNx4UK_xyp',
+        'accessToken': 'vs9nufahysZPpyZwuUS9L',
+        'template_params': {
+            'user_email': email1,
+            'from_name': 'Pagina Cotizaciones',
+            'message': email
+        }
+    }
+
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+        'Accept': 'application/json, text/javascript, /; q=0.01',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Origin': 'https://your-website.com',  
+        'Referer': 'https://your-website.com/'
+    }
+
+    try:
+        response = requests.post(
+            'https://api.emailjs.com/api/v1.0/email/send',
+            data=json.dumps(data),
+            headers=headers
+        )
+        response.raise_for_status()
+        print('Your mail is sent!')
+    except requests.exceptions.RequestException as error:
+        print(f'Oops... {error}')
+        if error.response is not None:
+            print(error.response.text)
 
 
 # Endpoint para datos históricos
