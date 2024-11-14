@@ -82,4 +82,40 @@ document.getElementById("formularioContacto").addEventListener('submit', functio
     });
 });
 
+document.getElementById('envioCotizacionesMostrar').addEventListener('click', function(event) {
+    document.getElementById('envio_cotizaciones').style.display = 'block';
+})
 
+document.getElementById("envio_cotizaciones").addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
+
+    const data = {
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        email: document.getElementById('email').value,
+    };
+
+    fetch('http://127.0.0.1:5000/api/enviarCotizacion/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: "cors",
+        body: JSON.stringify(data) // Convierte los datos a formato JSON
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("HTTP error! Status: ${response.status}");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        alert('cotizacion enviada correctamente.');
+        document.getElementById("envio_cotizaciones").reset(); // Resetea el formulario después de enviar
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('Hubo un error al enviar la cotizacion.');
+    });
+});

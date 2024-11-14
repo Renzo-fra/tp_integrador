@@ -91,7 +91,9 @@ footer {
     align-items: center;
 }
 
-
+#envio_cotizaciones {
+    display: none;
+}
 
 .formularios{
     display: flex;

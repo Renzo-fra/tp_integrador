@@ -7,14 +7,14 @@ from flask_cors import CORS
 app = Flask(__name__) #inicia la aplicacion de flask
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}}) #habilita CORS para la aplicacion permitiendo que cualquier origen * pueda hacer solicitudes a la API en las rutas que empiecen con /api/*
 
-cotizaciones = []
+
 # Función para obtener datos de la API de Dolar y procesarlos
 def obtener_cotizaciones():
     api_url = "https://dolarapi.com/v1/dolares"
     response = requests.get(api_url) 
     datos_api = response.json() 
 
-# cotizaciones = []
+    cotizaciones = []
 
     for cotizacion in datos_api:
         nombre = cotizacion.get("nombre", "Desconocido")
@@ -130,40 +130,9 @@ def api_historico(tipo_dolar, fecha_inicio, fecha_fin, valores):
 
 
 
-'''
 
+@app.route('/api/enviarCotizacion/', methods=['POST', 'OPTIONS'])
 def obtener_enviar_cotizaciones():
-    api_url = "https://dolarapi.com/v1/dolares"
-    response = requests.get(api_url) 
-    datos_api = response.json() 
-
-    for cotizacion in datos_api:
-        nombre = cotizacion.get("nombre", "Desconocido")
-        tipo = cotizacion.get("casa", "Desconocido")
-        compra = cotizacion.get("compra")
-        venta = cotizacion.get("venta")
-        fecha = cotizacion.get("fechaActualizacion")
-
-        cotizaciones.append({ 
-            "nombre": nombre,
-            "tipo": tipo,
-            "compra": compra,
-            "venta": venta,
-            "fecha": fecha
-        })
-    email="cotizacion de dolares\n"
-    for i in cotizaciones:
-            email += f"{i['nombre']}\n"
-            email += f"{i['tipo']}\n"
-            email += f"{i['compra']}\n"
-            email += f"{i['venta']}\n"
-            email += f"{i['fecha']}\n"
-    return email 
-
-
-
-@app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
-def contacto():
     if request.method == 'OPTIONS':
         # Responde a la solicitud preflight con un estado 200 y headers de CORS
         response = app.response_class(status=200)
@@ -178,47 +147,22 @@ def contacto():
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
-    # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
-    return jsonify({"status": "Contacto recibido", "data": data}), 200
-
-def enviar_mail_enviar(email):
-    email1 = request.form.get('email1')
-    data = {
-        'service_id': 'service_tq6wwwh',
-        'template_id': 'template_mx23lgn',
-        'user_id': 'kPneVDwcNx4UK_xyp',
-        'accessToken': 'vs9nufahysZPpyZwuUS9L',
-        'template_params': {
-            'user_email': email1,
-            'from_name': 'Pagina Cotizaciones',
-            'message': email
-        }
-    }
-
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
-        'Accept': 'application/json, text/javascript, /; q=0.01',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Origin': 'https://your-website.com',  
-        'Referer': 'https://your-website.com/'
-    }
-
-    try:
-        response = requests.post(
-            'https://api.emailjs.com/api/v1.0/email/send',
-            data=json.dumps(data),
-            headers=headers
-        )
-        response.raise_for_status()
-        print('Your mail is sent!')
-    except requests.exceptions.RequestException as error:
-        print(f'Oops... {error}')
-        if error.response is not None:
-            print(error.response.text)
+    cotizaciones = obtener_cotizaciones()
 
 
-'''
+    email_cotizacion="cotizacion de dolares\n"
+    for i in cotizaciones:
+            email_cotizacion += f"{i['nombre']}\n"
+            email_cotizacion += f"{i['tipo']}\n"
+            email_cotizacion += f"{i['compra']}\n"
+            email_cotizacion += f"{i['venta']}\n"
+            email_cotizacion += f"{i['fecha']}\n"
+    
+    mail_enviar(data['nombre'],data['apellido'],data['email'], email_cotizacion)
+    return jsonify({"status": "cotizacion recibida", "data": data}), 200
+
+
+
 
 #inicia el servidor
 if __name__ == "__main__":
