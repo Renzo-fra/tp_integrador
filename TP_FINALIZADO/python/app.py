@@ -34,7 +34,6 @@ def obtener_cotizaciones():
     return cotizaciones 
 
 
-# Endpoint para servir los datos de cotizaciones
 @app.route("/api/cotizaciones", methods=["GET"]) #define un endpoint /api/cotizaciones que acepta solo solicitudes GET
 def api_cotizaciones():
     return jsonify(obtener_cotizaciones()) #llama a obtener_cotizaciones para obtener los datos y utiliza jsonify para enviarlos en formato JSON al cliente que hizo la solicitud
@@ -55,8 +54,7 @@ def contacto():
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
-    # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
-    # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
+    # Aca podes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
     mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'],data['email'])
     return jsonify({"status": "Contacto recibido", "data": data}), 200
 
