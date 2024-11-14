@@ -17,8 +17,8 @@ def obtener_cotizaciones():
     cotizaciones = []
 
     for cotizacion in datos_api:
-        nombre = cotizacion.get("nombre", "Desconocido")
-        tipo = cotizacion.get("casa", "Desconocido")
+        nombre = cotizacion.get("nombre")
+        tipo = cotizacion.get("casa")
         compra = cotizacion.get("compra")
         venta = cotizacion.get("venta")
         fecha = cotizacion.get("fechaActualizacion")
