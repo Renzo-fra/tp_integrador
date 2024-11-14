@@ -14,7 +14,7 @@ def obtener_cotizaciones():
     response = requests.get(api_url) 
     datos_api = response.json() 
 
-   # cotizaciones = []
+# cotizaciones = []
 
     for cotizacion in datos_api:
         nombre = cotizacion.get("nombre", "Desconocido")
