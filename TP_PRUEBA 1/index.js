@@ -83,29 +83,3 @@ document.getElementById("formularioContacto").addEventListener('submit', functio
 });
 
 
-
-document.getElementById('envioCotizacionesMostrar').addEventListener('click', async function() {
-    const email = document.getElementById('email1').value;
-    if (email) {
-        try {
-            const response = await fetch('/api/contacto/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email1: email })
-            });
-            const result = await response.json();
-            if (response.ok) {
-                alert('Correo enviado exitosamente');
-            } else {
-                alert(result.error || 'Error al enviar el correo');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Ocurrió un error al intentar enviar el correo');
-        }
-    } else {
-        alert('Por favor ingresa un correo electrónico');
-    }
-});
