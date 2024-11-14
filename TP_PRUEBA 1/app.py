@@ -57,10 +57,10 @@ def contacto():
 
     # Aquí puedes agregar el procesamiento que necesites con data, como guardar en una base de datos o enviar un correo
     # print(f"Contacto recibido: {data}")  # Ejemplo de procesamiento
-    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'])
+    mail_enviar(data['nombre'],data['apellido'],'tobianfuso@gmail.com',data['mensaje'],data['email'])
     return jsonify({"status": "Contacto recibido", "data": data}), 200
 
-def mail_enviar(nombre,apellido,email,informacion_enviar):
+def mail_enviar(nombre,apellido,email,informacion_enviar,respuesta='tobiasanfuso@gmail.com'):
     data = {
         'service_id': 'service_tq6wwwh',
         'template_id': 'template_mx23lgn',
@@ -70,6 +70,7 @@ def mail_enviar(nombre,apellido,email,informacion_enviar):
             'from_name': 'Pagina Cotizaciones',
             'to_name': f'{nombre} {apellido}',
             'to_mail':f'{email}',
+            'reply_to':f'{respuesta}',
             'message': f'Cotizacion pedida {informacion_enviar}'
         }
     }
@@ -148,7 +149,7 @@ def obtener_enviar_cotizaciones():
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
     cotizaciones = obtener_cotizaciones()
-
+    print(data)
 
     email_cotizacion="cotizacion de dolares\n"
     for i in cotizaciones:
@@ -157,7 +158,9 @@ def obtener_enviar_cotizaciones():
             email_cotizacion += f"{i['compra']}\n"
             email_cotizacion += f"{i['venta']}\n"
             email_cotizacion += f"{i['fecha']}\n"
-    
+
+    print(email_cotizacion)
+
     mail_enviar(data['nombre'],data['apellido'],data['email'], email_cotizacion)
     return jsonify({"status": "cotizacion recibida", "data": data}), 200
 
