@@ -5,50 +5,47 @@ from datetime import datetime,timedelta
 from flask_cors import CORS 
 
 class CotizacionesAPI:
-    def _init_(self):
-        self.api.url = "https://dolarapi.com/v1/dolares"   
-
+    def __init__(self):
+        self.api_url = "https://dolarapi.com/v1/dolares"
     def obtener_datos_api(self):
-        try: 
-            response = requests.get(self.api.url)
+        try:
+            response = requests.get(self.api_url)
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.RequestException as e:
-            print(f"error al obtener las cotizaciones de la API: {e}")
-            
-            return[]
-        
+        except requests.exception.RequestExepcion as e:
+            print(f"error al obtener la cotizacion de la api: {e}")
+        return[]
+
 class Cotizaciones:
     def __init__(self, api_client):
         self.api_client = api_client
 
     def obtener_cotizaciones(self):
-        datos_api = self.api_client.obterner_datos_api()
+        datos_api = self.api_client.obtener_datos_api()
 
         cotizaciones = []
 
         for cotizacion in datos_api:
             cotizaciones.append({
                 "nombre": cotizacion.get("nombre"),
-                "casa": cotizacion.get("casa"),
+                "tipo": cotizacion.get("casa"),
                 "compra": cotizacion.get("compra"),
                 "venta": cotizacion.get("venta"),
                 "fecha": cotizacion.get("fechaActualizacion"),
             })
-
         return cotizaciones
-    
 
-app = Flask (__name__)
-CORS(app, supports_credentials=True, resources={r"/api/": {"origins": ""}})
-    
+app = Flask(__name__)
+CORS (app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
+
 cotizaciones_api = CotizacionesAPI()
 cotizaciones_service = Cotizaciones(cotizaciones_api)
 
-
-@app.route('/api/cotizaciones', methods = ['GET'])
+@app.route("/api/cotizaciones", methods=["GET"])
 def api_cotizaciones():
     return jsonify(cotizaciones_service.obtener_cotizaciones())
+
+
 
 
 @app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
