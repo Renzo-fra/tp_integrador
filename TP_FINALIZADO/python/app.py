@@ -4,39 +4,52 @@ import json
 from datetime import datetime,timedelta
 from flask_cors import CORS 
 
-app = Flask(__name__) #inicia la aplicacion de flask
-CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}}) #habilita CORS para la aplicacion permitiendo que cualquier origen * pueda hacer solicitudes a la API en las rutas que empiecen con /api/*
+class CotizacionesAPI:
+    def _init_(self):
+        self.api.url = "https://dolarapi.com/v1/dolares"   
 
+    def obtener_datos_api(self):
+        try: 
+            response = requests.get(self.api.url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"error al obtener las cotizaciones de la API: {e}")
+            
+            return[]
+        
+class Cotizaciones:
+    def __init__(self, api_client):
+        self.api_client = api_client
 
-# Función para obtener datos de la API de Dolar y procesarlos
-def obtener_cotizaciones():
-    api_url = "https://dolarapi.com/v1/dolares"
-    response = requests.get(api_url) 
-    datos_api = response.json() 
+    def obtener_cotizaciones(self):
+        datos_api = self.api_client.obterner_datos_api()
 
-    cotizaciones = []
+        cotizaciones = []
 
-    for cotizacion in datos_api:
-        nombre = cotizacion.get("nombre",)
-        tipo = cotizacion.get("casa",)
-        compra = cotizacion.get("compra")
-        venta = cotizacion.get("venta")
-        fecha = cotizacion.get("fechaActualizacion")
+        for cotizacion in datos_api:
+            cotizaciones.append({
+                "nombre": cotizacion.get("nombre"),
+                "casa": cotizacion.get("casa"),
+                "compra": cotizacion.get("compra"),
+                "venta": cotizacion.get("venta"),
+                "fecha": cotizacion.get("fechaActualizacion"),
+            })
 
-        cotizaciones.append({ 
-            "nombre": nombre,
-            "tipo": tipo,
-            "compra": compra,
-            "venta": venta,
-            "fecha": fecha
-        })
+        return cotizaciones
     
-    return cotizaciones 
+
+app = Flask (__name__)
+CORS(app, supports_credentials=True, resources={r"/api/": {"origins": ""}})
+    
+cotizaciones_api = CotizacionesAPI()
+cotizaciones_service = Cotizaciones(cotizaciones_api)
 
 
-@app.route("/api/cotizaciones", methods=["GET"]) #define un endpoint /api/cotizaciones que acepta solo solicitudes GET
+@app.route('/api/cotizaciones', methods = ['GET'])
 def api_cotizaciones():
-    return jsonify(obtener_cotizaciones()) #llama a obtener_cotizaciones para obtener los datos y utiliza jsonify para enviarlos en formato JSON al cliente que hizo la solicitud
+    return jsonify(cotizaciones_service.obtener_cotizaciones())
+
 
 @app.route('/api/contacto/', methods=['POST', 'OPTIONS'])
 def contacto():
@@ -146,7 +159,7 @@ def obtener_enviar_cotizaciones():
     if not data:
         return jsonify({"error": "No se proporcionaron datos"}), 400
 
-    cotizaciones = obtener_cotizaciones()
+    cotizaciones = cotizaciones_service.obtener_cotizaciones()
     print(data)
 
     email_cotizacion="cotizacion de dolares\n"
